@@ -64,20 +64,27 @@ classdef main_exported < matlab.apps.AppBase
 
     
     methods (Access = public)
-        function [nghiem, solanlap] = chiadoi(f, a, b, saiso)
-    solanlap = 0;
-    while (b - a) / 2 > saiso
-        nghiem = (a + b) / 2;
-        if f(a) * f(nghiem) < 0
-            b = nghiem;
-        else
-            a = nghiem;
+        
+        function [nghiem, solanlap] = chiadoi(app, f, a, b, saiso)
+            solanlap = 0;
+            while (b - a) / 2 > saiso
+                c = (a + b) / 2;
+                solanlap = solanlap + 1;
+        
+                if f(c) == 0
+                    nghiem = c;
+                    return;
+                elseif f(a) * f(c) < 0
+                    b = c;
+                else
+                    a = c;
+                end
+            end
+    
+            nghiem = (a + b) / 2;
         end
-        solanlap = solanlap + 1;
-    end
-    nghiem = (a + b) / 2;
-end
-    end
+        
+      end
 
 
     % Callbacks that handle component events
@@ -85,12 +92,13 @@ end
 
         % Button pushed function: Ketqua_Button_1
         function Ketqua_Button_1Pushed(app, event)
-            f = app.NghiemField_1.Value;
+            
+            f = @(x) 3*x^3 - 8*x^2 - 20*x + 16;
             a = app.PhanliField_1.Value;
             b = app.PhanliField_2.Value;
             saiso = app.SaisoField_1.Value;
 
-            [nghiem, solanlap] = chiadoi(f, a, b, saiso);
+            [nghiem, solanlap] = chiadoi(app, f, a, b, saiso);
             app.KQNghiem_1.Value = num2str(nghiem);
             app.KQLap_1.Value = num2str(solanlap);
             
