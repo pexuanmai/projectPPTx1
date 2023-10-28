@@ -65,24 +65,19 @@ classdef main_exported < matlab.apps.AppBase
     
     methods (Access = public)
         
-        function [nghiem, solanlap] = chiadoi(app, f, a, b, saiso)
-            solanlap = 0;
-            while (b - a) / 2 > saiso
-                c = (a + b) / 2;
-                solanlap = solanlap + 1;
-        
-                if f(c) == 0
-                    nghiem = c;
-                    return;
-                elseif f(a) * f(c) < 0
-                    b = c;
-                else
-                    a = c;
-                end
-            end
-    
-            nghiem = (a + b) / 2;
+        function [nghiem, solanlap] = chiadoi(f, a, b, saiso)
+    solanlap = 0;
+    while abs(a-b) > saiso
+        c = (a + b) / 2;
+        solanlap = solanlap + 1;
+        if f(a)*f(c) > 0
+            a = c;
+        else
+            b = c;
         end
+    end
+    nghiem = (a + b) / 2;
+end
         
       end
 
